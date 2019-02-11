@@ -1,9 +1,9 @@
 package service;
 
 import bean.Compte;
+import bean.Operation;
 import java.util.List;
 import java.util.ArrayList;
-import util.searchUtil;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -16,10 +16,13 @@ import util.searchUtil;
  */
 public class CompteService extends AbstractFacade<Compte> {
 
-    public List<Compte> searchByCriteria (String rib, Double soldeMin,Double soldeMax){
-        String query =constractQuery(rib,soldeMin,soldeMax);
+    OperationService operationService = new OperationService();
+
+    public List<Compte> searchByCriteria(String rib, Double soldeMin, Double soldeMax) {
+        String query = constractQuery(rib, soldeMin, soldeMax);
         return getEntityManager().createQuery(query).getResultList();
     }
+
     private String constractQuery(String rib, Double soldeMin, Double soldeMax) {
         String query = "SELECT c FROM Compte c WHERE 1=1";
         //dans la requete precedente il faut selecter le c from la class qui se ytrouve dans le bean
@@ -35,13 +38,17 @@ public class CompteService extends AbstractFacade<Compte> {
             query += " AND c.solde<='" + soldeMax + "'";
 
         }
-        System.out.println("voici query==>"+query);
+        System.out.println("voici query==>" + query);
         return query;
 
     }
 
     public CompteService() {
         super(Compte.class);
+    }
+
+    public CompteService(Class<Compte> entityClass) {
+        super(entityClass);
     }
 
     public Compte ouvrirCompte(String rib, double soldeInitial) {
@@ -88,6 +95,8 @@ public class CompteService extends AbstractFacade<Compte> {
             double nvSolde = c.getSolde() + montantCredit;
             c.setSolde(nvSolde);
             edit(c);
+            Operation operation = new Operation(montantCredit, 1,c);
+            operationService.create(operation);
             return 1;
 
         }
@@ -109,6 +118,8 @@ public class CompteService extends AbstractFacade<Compte> {
             double nvSolde = c.getSolde() - montantDebit;
             c.setSolde(nvSolde);
             edit(c);
+            Operation operation = new Operation(montantDebit, 2, c);
+            operationService.create(operation);
             return 1;
         }
     }
@@ -129,7 +140,7 @@ public class CompteService extends AbstractFacade<Compte> {
         List<Compte> resultat = new ArrayList();
         for (int i = 0; i < comptes.size(); i++) {
             Compte c = comptes.get(i);
-            if (c.getSolde() > c.soldeMin) {
+            if (c.getSolde() > soldeMin) {
                 resultat.add(c);
             }
 
@@ -160,8 +171,15 @@ public class CompteService extends AbstractFacade<Compte> {
 
     }
 
-    public void save(Compte compte) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Compte> findBySolde(double soldeMin, double soldeMax) {
+        List<Compte> all = findAll();
+        List<Compte> res = new ArrayList<Compte>();
+        for (Compte compte : all) {
+            if (compte.getSolde() < soldeMax && compte.getSolde() > soldeMin) {
+                res.add(compte);
+            }
+        }
+        return res;
     }
 
 }

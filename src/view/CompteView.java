@@ -15,7 +15,6 @@ import service.CompteService;
  */
 public class CompteView extends javax.swing.JFrame {
     CompteService compteService=new CompteService();
-
     /**
      * Creates new form CompteView
      */
@@ -120,19 +119,18 @@ public class CompteView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        // Compte compte=getParam();
-       // compteService.ouvrirCompte(jTextField1.getText(),new Double(jTextField2.getText()));
+        
+        compteService.ouvrirCompte(jTextField1.getText(),new Double(jTextField2.getText()));
        // JOptionPane.showMessageDialog(null,"COMPTE AJOUTER AVEC SUCCES","INFO",JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
-private Compte getParam(){
-    Compte compte=new Compte();
-    compte.setRib(jTextField1.getText());
-    compte.setSolde(new Double(jTextField2.getText()));
-    return compte;
-    
-    
-}
+//private Compte getParam(){
+//    Compte compte=new Compte();
+//    compte.setRib(jTextField1.getText());
+//    compte.setSolde(new Double(jTextField2.getText()));
+//    return compte;
+//    
+//    
+//}
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed

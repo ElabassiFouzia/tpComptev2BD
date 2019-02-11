@@ -26,7 +26,6 @@ public class Compte implements Serializable {
     private double solde;
     private boolean ouvert;
     private char classe;
-    public double soldeMin;
 
     public Compte(String rib, double solde) {
         this.rib = rib;
@@ -42,6 +41,11 @@ public class Compte implements Serializable {
         this.ouvert = ouvert;
         this.classe = classe;
     }
+
+    public Compte(String rib) {
+        this.rib = rib;
+    }
+    
     
 
    
